@@ -10,37 +10,43 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fetchPosts()
     }
 
-    fun fetchPosts(){
-        val apiClient =ApiClient.buildApiClient(ApiInterface::class.java)
-        val request =apiClient.getPosts()
+    fun fetchPosts() {
+        val apiClient = ApiClient.buildApiClient(ApiInterface::class.java)
+        val request = apiClient.getPosts()
 
         request.enqueue(object : Callback<List<Post>> {
             override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-              if (response.isSuccessful){
-                  val post = response.body()!!
-                  Toast.makeText(baseContext, "fetched ${post.size}posts",
-                      Toast.LENGTH_LONG).show()
-                  var postAdapter = PostRvAdapter(baseContext,post)
-                  binding.rvPosts.layoutManager = LinearLayoutManager(baseContext)
-                  binding.rvPosts.adapter=postAdapter
-              }
+                if (response.isSuccessful) {
+                    val post = response.body()!!
+                    Toast.makeText(
+                        baseContext, "fetched ${post.size}posts",
+                        Toast.LENGTH_LONG
+                    ).show()
+//                    var postAdapter = PostRvAdapter(baseContext)
+                    binding.rvPosts.layoutManager = LinearLayoutManager(baseContext)
+                    binding.rvPosts.adapter = PostRvAdapter(post)
+                }
             }
 
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+                Toast.makeText(baseContext, t.message, Toast.LENGTH_LONG).show()
 
             }
         })
 
 
     }
+//    fun displayPosts(postsList: List<Post>){
+//        binding.rvPosts.layoutManager = LinearLayoutManager(this)
+//        var postAdapter = PostRvAdapter
+//    }
 }

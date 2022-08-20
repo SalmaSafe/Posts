@@ -9,6 +9,9 @@ interface ApiInterface {
     @GET("/posts")
     fun getPosts():Call<List<Post>>
 
-    @GET("posts/{id}")
+    @GET("/posts/{id}")
     fun getPostsById(@Path("id")postId: Int):Call<Post>
+
+    @GET ("/posts/{id}/comments")
+    fun getComments(@Path("id") commentId: Int):Call<List<Comment>>
 }
